@@ -1,4 +1,5 @@
 <template>
+  <h1>A Brilliant Calculator</h1>
   <div id="nav">
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link>
@@ -12,7 +13,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #f0be19;
 }
 
 #nav {
@@ -21,10 +22,10 @@
 
 #nav a {
   font-weight: bold;
-  color: #2c3e50;
+  color: #f0be19;
 }
 
 #nav a.router-link-exact-active {
-  color: #42b983;
+  color: #f0be19;
 }
 </style>
