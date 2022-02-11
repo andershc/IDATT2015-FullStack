@@ -1,12 +1,27 @@
 <template>
-<div>
-  <h1>HEISANN</h1>
-</div>
+  <label v-if="label">{{ label }}</label>
+  <input
+      v-bind="$attrs"
+      :placeholder="label"
+      class="field"
+      :value="modelValue"
+      @input="$emit('update:modelValue', $submission.target.value)"
+  >
 </template>
 
 <script>
 export default {
-  name: "FeedbackComponent"
+  name: "BaseInput",
+  props: {
+    label: {
+      type: String,
+      default: ''
+    },
+    modelValue: {
+      type: [String, Number],
+      default: ''
+    }
+  }
 }
 </script>
 
