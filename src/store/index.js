@@ -1,8 +1,16 @@
 import { createStore } from "vuex";
 
 export default createStore({
-  state: {},
+  state: {
+    submissions: [],
+    submission: {}
+  },
   mutations: {},
-  actions: {},
+  actions: {
+    submitSubmission(submission) {
+      console.log("Submission sent! " + submission.id)
+
+    }
+  },
   modules: {},
 });
