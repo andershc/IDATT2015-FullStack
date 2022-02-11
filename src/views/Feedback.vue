@@ -2,23 +2,23 @@
   <div class="Feedback">
     <h1>Please leave your feedback!</h1>
     <form id="inputs" @submit.prevent="onSubmit">
-      <BaseInput
+      <BaseInput class="inputFields"
           v-model="submission.name"
           label="Name"
-          type="text"
-      />
-      <BaseInput
+          type="text" required
+          model-value="name"/>
+      <BaseInput class="inputFields"
           v-model="submission.email"
           label="E-mail"
           type="text"
-          resize:="none"
-      />
-      <BaseInput
+          resize:="none" required
+          model-value="email"/>
+      <BaseInput class="inputFields"
           id="message"
           v-model="submission.message"
           label="Message"
-          type="text"
-      />
+          type="text" required
+          model-value="message"/>
       <button :disabled="submission.message === '' || submission.email === ''
       || submission.name === ''" type="submit">Submit</button>
     </form>
@@ -75,13 +75,21 @@ export default {
   width: 100%;
   margin: auto;
 }
+.inputFields:invalid{
+  border-color: red;
+  border-width: 0.1em;
+}
 #message {
-  height:10em;
+  height:20em;
+
 }
 button{
   max-width: 8em;
-  margin-left: 70%;
+  margin-left: 80%;
   background: #f0be19;
 
+}
+button:disabled{
+  background: #78797e;
 }
 </style>
