@@ -2,9 +2,9 @@
   <label id="label" v-if="label">*{{ label }}:</label>
   <textarea
       className="baseInputField"
-      v-bind="{
+    v-bind="{
         ...$attrs,
-        onInput: updateValue,
+      onInput: updateValue,
       }"
       :id="uuid"
       :placeholder="label"

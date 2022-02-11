@@ -1,5 +1,5 @@
 <template>
-  <Calculator/>
+  <Calculator />
 </template>
 
 <script>
@@ -15,7 +15,7 @@ export default {
 </script>
 
 <style scoped>
-h1{
+h1 {
   color: #f0be19;
 }
 </style>
