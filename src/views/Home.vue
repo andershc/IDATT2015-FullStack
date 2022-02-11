@@ -1,6 +1,5 @@
 <template>
-
-  <Calculator></Calculator>
+  <Calculator/>
 </template>
 
 <script>
@@ -20,4 +19,3 @@ h1{
   color: #f0be19;
 }
 </style>
-
