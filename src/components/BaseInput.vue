@@ -1,26 +1,43 @@
 <template>
-  <label id="label" v-if="label">*{{ label }}:</label>
-  <textarea
-      className="baseInputField"
+  <label
+      id="label"
+      v-if="label"
+      :for="uuid"
+  >
+    *{{ label }}:
+  </label>
+  <input
+      class="baseInputField"
       v-bind="{
-        ...$attrs,
-      onInput: updateValue,
-      }"
+      ...$attrs,
+      onInput: updateValue
+    }"
       :id="uuid"
-      :placeholder="label"
-      :aria-describedby="error ? '${uuid}-error' : null"
-      :aria-invalid="!!error"
       :value="modelValue"
+      :placeholder="label"
+      :aria-describedby="error ? `${uuid}-error` : null"
+      :aria-invalid="!!error"
       :class="{ error }"
-  />
+  >
+  <BaseErrorMessage
+      v-if="error"
+      :id="`${uuid}-error`"
+  >
+    {{ error }}
+  </BaseErrorMessage>
 </template>
 
 <script>
 import UniqueId from "../features/UniqueId.js";
 import SetupFormComponent from "../features/SetupFormComponent";
+import BaseErrorMessage from "@/components/BaseErrorMessage";
+
 
 export default {
   name: "BaseInput",
+  components: {
+    BaseErrorMessage,
+  },
   props: {
     label: {
       type: String,
@@ -51,6 +68,12 @@ export default {
   font-size: 1em;
   color: black;
   resize: none;
+  background: white;
+  padding: 0.5em;
+}
+.baseInputField:invalid{
+  border-color: red;
+  border-width: 0.1em;
 }
 
 ::placeholder {

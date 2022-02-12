@@ -3,24 +3,25 @@
     <h1>Please leave your feedback!</h1>
     <form id="inputs" @submit.prevent="onSubmit">
       <BaseInput class="inputFields"
-          v-model="submission.name"
-          label="Name"
-          type="text" required
-          model-value="name"/>
+        label="Name"
+        type="name"
+        v-model="submission.name"
+        :error="nameError"
+      />
       <BaseInput class="inputFields"
-          v-model="submission.email"
-          label="E-mail"
-          type="text"
-          resize:="none" required
-          model-value="email"/>
+        label="Email"
+        type="email"
+        v-model="submission.email"
+        :error="emailError"
+      />
       <BaseInput class="inputFields"
-          id="message"
-          v-model="submission.message"
-          label="Message"
-          type="text" required
-          model-value="message"/>
-      <button :disabled="submission.message === '' || submission.email === ''
-      || submission.name === ''" type="submit">Submit</button>
+        id="message"
+        label="Message"
+        type="message"
+        v-model="submission.message"
+        :error="messageError"
+      />
+      <button :disabled="!isComplete" type="submit">Submit</button>
     </form>
 
   </div>
@@ -30,11 +31,51 @@
 // @ is an alias to /src
 import BaseInput from "@/components/BaseInput";
 import { v4 as uuidv4 } from 'uuid';
+import { useField, useForm } from 'vee-validate';
 
 export default {
   name: "Feedback",
   components: {
     BaseInput,
+  },
+  setup() {
+    const validations = {
+      name: value => {
+        const requiredMessage = 'This field is required'
+        if (value === undefined || value === null) return requiredMessage
+        if (!String(value).length) return requiredMessage
+        if (value.type !== String) return requiredMessage
+        return true
+      },
+      email: value => {
+        if (!value) return 'This field is required'
+        const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        if (!regex.test(String(value).toLowerCase())) {
+          return 'Please enter a valid email address'
+        }
+        return true
+      },
+      message: value => {
+        const requiredMessage = 'This field is required'
+        if (value === undefined || value === null) return requiredMessage
+        if (!String(value).length) return requiredMessage
+        return true
+      }
+    }
+    useForm({
+      validationSchema: validations
+    })
+    const { value: email, errorMessage: emailError } = useField('email')
+    const { value: name, errorMessage: nameError } = useField('name')
+    const { value: message, errorMessage: messageError } = useField('message')
+    return {
+      email,
+      emailError,
+      name,
+      nameError,
+      message,
+      messageError
+    }
   },
   data() {
     return {
@@ -43,7 +84,7 @@ export default {
         email: '',
         message: '',
         id: ''
-      }
+      },
     }
   },
   methods: {
@@ -63,6 +104,11 @@ export default {
             })
           })
     }
+  },
+  computed: {
+    isComplete () {
+      return this.submission.name && this.submission.email && this.submission.message;
+    }
   }
 };
 </script>
@@ -75,18 +121,19 @@ export default {
   width: 100%;
   margin: auto;
 }
-.inputFields:invalid{
-  border-color: red;
-  border-width: 0.1em;
-}
-#message {
-  height:20em;
 
+#message {
+  height:2em;
+
+}
+.inputFields {
+  margin: 1em;
 }
 button{
   max-width: 8em;
   margin-left: 80%;
   background: #f0be19;
+  margin-top: 0.5em;
 
 }
 button:disabled{
