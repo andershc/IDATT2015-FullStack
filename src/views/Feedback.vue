@@ -4,23 +4,26 @@
     <form id="inputs" @submit.prevent="onSubmit">
       <BaseInput class="inputFields"
         label="Name"
-        type="name"
+        type="text"
+        model-value=""
         v-model="submission.name"
         :error="nameError"
-      />
+       />
       <BaseInput class="inputFields"
         label="Email"
         type="email"
+        model-value=""
         v-model="submission.email"
         :error="emailError"
-      />
+       />
       <BaseInput class="inputFields"
         id="message"
         label="Message"
-        type="message"
+        type="text"
+        model-value=""
         v-model="submission.message"
         :error="messageError"
-      />
+       />
       <button :disabled="!isComplete" type="submit">Submit</button>
     </form>
 
@@ -39,34 +42,34 @@ export default {
     BaseInput,
   },
   setup() {
+    const errorMessage = 'This field is required'
     const validations = {
-      name: value => {
-        const requiredMessage = 'This field is required'
-        if (value === undefined || value === null) return requiredMessage
-        if (!String(value).length) return requiredMessage
-        if (value.type !== String) return requiredMessage
+      name: (value) => {
+        if (value === undefined || value == null) return errorMessage
+        if (!String(value).length) return errorMessage
+        if (value.type !== String) return 'Name must be a string'
         return true
       },
-      email: value => {
+      email: (value) => {
         if (!value) return 'This field is required'
-        const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        if (!regex.test(String(value).toLowerCase())) {
+        const regexEmailCheck = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        if (!regexEmailCheck.test(String(value).toLowerCase())) {
           return 'Please enter a valid email address'
         }
         return true
       },
-      message: value => {
-        const requiredMessage = 'This field is required'
-        if (value === undefined || value === null) return requiredMessage
-        if (!String(value).length) return requiredMessage
+      message: (value) => {
+        if (value === undefined || value === null) return errorMessage
+        if (!String(value).length) return errorMessage
         return true
       }
     }
     useForm({
       validationSchema: validations
-    })
-    const { value: email, errorMessage: emailError } = useField('email')
+    });
+
     const { value: name, errorMessage: nameError } = useField('name')
+    const { value: email, errorMessage: emailError, handleChange } = useField('email')
     const { value: message, errorMessage: messageError } = useField('message')
     return {
       email,
@@ -74,7 +77,8 @@ export default {
       name,
       nameError,
       message,
-      messageError
+      messageError,
+      handleChange
     }
   },
   data() {
