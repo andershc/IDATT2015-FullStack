@@ -1,26 +1,14 @@
 #!/usr/bin/env sh
-
-#Remove previous build
-
-rm -rf dist
-
-#Build
+# abort on errors
 set -e
+# build
 npm run build
-
-#Add CNAME file
-cp CNAME dist/
+# navigate into the build output directory
 cd dist
-
-#Git
+# if you are deploying to a custom domain
+# echo 'www.example.com' > CNAME
 git init
 git add -A
 git commit -m 'deploy'
-
-
-
-#Push to gh-pages branch
-git push -f https://github.com/andershc/IDATT2015-FullStack.git master:gh-pages
-
-
+git push -f https://github.com/andershc/IDATT2105-FullStack master:gh-pages
 cd -

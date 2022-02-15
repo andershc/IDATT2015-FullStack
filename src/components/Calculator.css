@@ -33,7 +33,7 @@
     display: flex;
     background: #393d3f;
     flex-direction: column;
-    padding: 0px;
+    padding: 0;
 }
 input{
     text-align: right;

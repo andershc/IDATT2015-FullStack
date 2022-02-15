@@ -18,6 +18,7 @@
       :aria-describedby="error ? `${uuid}-error` : null"
       :aria-invalid="!!error"
       :class="{ error }"
+      @input="$emit('update:modelValue', $event.target.value)"
   >
   <BaseErrorMessage
       v-if="error"
