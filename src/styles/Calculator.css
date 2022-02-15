@@ -11,21 +11,20 @@
     height: 65px;
     background: #78797e;
     margin: 3px;
+    border-radius: 10px;
 }
 .btn:hover{
     background: #fff;
     color: black;
+    cursor: pointer;
 }
-.equals{
-     font-size:2em;
-     height: 65px;
-     background-color: #f0be19;
-     margin: 3px;
+.operator{
+    background-color: #f0be19;
+    color: black;
+}
+.double{
      grid-column: span 2;
  }
-.equals:hover{
-    background: #fff;
-}
 .calculator{
     width: 100%;
     max-width: 400px;

@@ -7,22 +7,22 @@
         <button class="btn" @click="clear()">C</button>
         <button class="btn" @click="ans()">ANS</button>
         <button class="btn" @click="del()">DEL</button>
-        <button class="btn" @click="operatorSelect('+')">+</button>
+        <button class="btn operator" @click="operatorSelect('+')">+</button>
         <button class="btn" @click="buttonOnClick(1)">1</button>
         <button class="btn" @click="buttonOnClick(2)">2</button>
         <button class="btn" @click="buttonOnClick(3)">3</button>
-        <button class="btn" @click="operatorSelect('-')">-</button>
+        <button class="btn operator" @click="operatorSelect('-')">-</button>
         <button class="btn" @click="buttonOnClick(4)">4</button>
         <button class="btn" @click="buttonOnClick(5)">5</button>
         <button class="btn" @click="buttonOnClick(6)">6</button>
-        <button class="btn" @click="operatorSelect('*')">*</button>
+        <button class="btn operator" @click="operatorSelect('*')">*</button>
         <button class="btn" @click="buttonOnClick(7)">7</button>
         <button class="btn" @click="buttonOnClick(8)">8</button>
         <button class="btn" @click="buttonOnClick(9)">9</button>
-        <button class="btn" @click="operatorSelect('/')">/</button>
+        <button class="btn operator" @click="operatorSelect('/')">/</button>
         <button class="btn" @click="buttonOnClick(0)">0</button>
-        <button class="btn" @click="buttonOnClick('.')">.</button>
-        <button class="equals" @click="equals()">=</button>
+        <button class="btn operator" @click="buttonOnClick('.')">.</button>
+        <button class="btn operator double" @click="equals()">=</button>
       </div>
     </div>
     <ul class="log">
