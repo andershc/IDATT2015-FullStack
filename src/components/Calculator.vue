@@ -122,5 +122,5 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-@import "Calculator.css";
+@import "./../styles/Calculator.css";
 </style>
