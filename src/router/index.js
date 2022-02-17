@@ -16,6 +16,20 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Feedback.vue"),
   },
+  {
+    path: '/error/:error',
+    name: 'ErrorDisplay',
+    props: true,
+    component: () =>
+        import("../views/ErrorDisplay")
+  },
+  {
+    path: '/feedbackSubmission/:id',
+    name: 'FeedbackDetails',
+    props: true,
+    component: () =>
+        import("../views/FeedbackDetails")
+  }
 ];
 
 const router = createRouter({

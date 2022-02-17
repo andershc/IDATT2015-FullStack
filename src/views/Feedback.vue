@@ -5,14 +5,14 @@
       <BaseInput class="inputFields"
         label="Name"
         type="text"
-        model-value=""
+        model-value="this.$store.state.user"
         v-model="submission.name"
         :error="nameError"
        />
       <BaseInput class="inputFields"
         label="Email"
         type="email"
-        model-value=""
+        model-value="this.$store.state.userEmail"
         v-model="submission.email"
         :error="emailError"
        />
@@ -100,6 +100,10 @@ export default {
       this.$store.dispatch('submitSubmission', submission)
           .then(() => {
             console.log("Success")
+            this.$router.push({
+              name: 'FeedbackDetails',
+              params: { id: submission.id }
+            })
           })
           .catch(error => {
             this.$router.push({
