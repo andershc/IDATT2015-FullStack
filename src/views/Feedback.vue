@@ -2,25 +2,27 @@
   <div class="Feedback">
     <h1>Please leave your feedback!</h1>
     <form id="inputs" @submit.prevent="onSubmit">
-      <BaseInput class="inputFields"
+      <BaseInput class="inputFields" id="name"
         label="Name"
         type="text"
-        model-value="this.$store.state.user"
+        value="getName"
+        v-model.lazy="this.$store.state.user"
         v-model="submission.name"
         :error="nameError"
-       />
-      <BaseInput class="inputFields"
+        />
+      <BaseInput class="inputFields" id="emailField"
         label="Email"
         type="email"
-        model-value="this.$store.state.userEmail"
+        v-model.lazy="this.$store.state.userEmail"
         v-model="submission.email"
         :error="emailError"
-       />
+
+        />
       <BaseInput class="inputFields"
         id="message"
         label="Message"
         type="text"
-        model-value=""
+
         v-model="submission.message"
         :error="messageError"
        />
@@ -41,26 +43,49 @@ export default {
   components: {
     BaseInput,
   },
+  data() {
+    return {
+      submission: {
+        name: '',
+        email: '',
+        message: '',
+        id: ''
+      },
+      nameIsValid: false,
+      emailIsValid: false,
+      messageIsValid: false
+    }
+  },
   setup() {
     const errorMessage = 'This field is required'
     const validations = {
       name: (value) => {
-        if (value === undefined || value == null) return errorMessage
-        if (!String(value).length) return errorMessage
-        if (value.type !== String) return 'Name must be a string'
-        return true
+        if (value === undefined || value == null || !String(value).length){
+          return errorMessage
+        }
+        if (value.type !== String) {
+          return 'Name must be a string'
+        } else{
+          this.nameIsValid = true
+          return true
+        }
       },
       email: (value) => {
-        if (!value) return 'This field is required'
+        if (!value) {
+          return 'This field is required'
+        }
         const regexEmailCheck = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         if (!regexEmailCheck.test(String(value).toLowerCase())) {
           return 'Please enter a valid email address'
         }
+        this.emailIsValid = true
         return true
       },
       message: (value) => {
-        if (value === undefined || value === null) return errorMessage
-        if (!String(value).length) return errorMessage
+        if (value === undefined || value === null || !String(value).length) {
+          return errorMessage
+        }
+        this.messageIsValid = true
         return true
       }
     }
@@ -81,16 +106,7 @@ export default {
       handleChange
     }
   },
-  data() {
-    return {
-      submission: {
-        name: '',
-        email: '',
-        message: '',
-        id: ''
-      },
-    }
-  },
+
   methods: {
     onSubmit() {
       const submission = {
@@ -99,7 +115,6 @@ export default {
       }
       this.$store.dispatch('submitSubmission', submission)
           .then(() => {
-            console.log("Success")
             this.$router.push({
               name: 'FeedbackDetails',
               params: { id: submission.id }
@@ -115,7 +130,7 @@ export default {
   },
   computed: {
     isComplete () {
-      return this.submission.name && this.submission.email && this.submission.message;
+      return this.submission.name && this.submission.email && this.submission.message
     }
   }
 };

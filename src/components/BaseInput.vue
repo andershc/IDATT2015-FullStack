@@ -50,7 +50,7 @@ export default {
     },
     modelValue: {
       type: [String, Number],
-      required: true
+      default: ''
     }
   },
   setup(props, context) {
