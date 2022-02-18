@@ -38,11 +38,11 @@ export default createStore({
             console.log(error)
           })
     },
-    fetchSubmissions({ commit }) {
+    fetchSubmissions({ commit, state }) {
       FeedbackService.getSubmissions()
           .then(response => {
             commit('SET_SUBMISSIONS', response.data)
-            console.log("Successfully fetched feedback from server")
+            console.log("Successfully fetched feedback from server " + state.submissions.length)
           })
           .catch(error => {
             console.log("could not get submissions" + error)

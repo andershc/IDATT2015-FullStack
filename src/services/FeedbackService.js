@@ -22,13 +22,13 @@ export default {
     getName(){
         return apiClient.get('/profile/name')
     },
-    setName(){
-
+    setName(newName){
+        return apiClient.post('/profile', {name: newName})
     },
     getEmail(){
         return apiClient.get('profile/email')
     },
-    setEmail(){
-
+    setEmail(newEmail){
+        return apiClient.post('/profile', {email: newEmail})
     }
 }

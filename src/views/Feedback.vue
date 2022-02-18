@@ -81,6 +81,13 @@ export default {
   },
   created() {
     this.$store.dispatch('fetchSubmissions')
+    if(this.$store.state.user){
+      this.name = this.$store.state.user
+    }
+    if(this.$store.state.userEmail){
+      this.email = this.$store.state.userEmail
+    }
+
   },
   methods: {
     onSubmit() {
