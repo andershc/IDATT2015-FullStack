@@ -45,10 +45,10 @@ export default {
   data() {
     return {
       submission: {
+        id: '',
         name: '',
         email: '',
         message: '',
-        id: ''
       }
     }
   },
@@ -79,15 +79,18 @@ export default {
       errors
     }
   },
-
+  created() {
+    this.$store.dispatch('fetchSubmissions')
+  },
   methods: {
     onSubmit() {
       const submission = {
         ...this.submission,
+        id: uuidv4(),
         name: this.name,
         email: this.email,
         message: this.message,
-        id: uuidv4()
+
       }
       console.log(submission.name)
       this.$store.dispatch('submitSubmission', submission)

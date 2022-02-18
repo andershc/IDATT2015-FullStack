@@ -13,10 +13,10 @@ export default {
     getSubmissions(){
         return apiClient.get('/submissions')
     },
-    getSubmission(searchID) {
-        return this.getSubmissions().find(({id}) => id === searchID)
-    },
-    submit(submission) {
+    postFeedback(submission) {
         return apiClient.post('/submissions', submission)
-    }
+    },
+    getSubmission(id) {
+        return apiClient.get('/submissions/' + id)
+    },
 }
