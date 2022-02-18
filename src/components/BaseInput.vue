@@ -19,6 +19,8 @@
       :aria-invalid="!!error"
       :class="{ error }"
       @input="$emit('update:modelValue', $event.target.value)"
+      @blur="$emit('validate')"
+      @keypress="$emit('validate')"
   >
   <BaseErrorMessage
       v-if="error"

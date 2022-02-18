@@ -18,3 +18,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.errorMessage{
+  color: red;
+  margin-bottom: 1em;
+}
+</style>

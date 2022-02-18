@@ -6,23 +6,24 @@
         label="Name"
         type="text"
         value="getName"
-        v-model="name"
+        v-model="submission.name"
         :error="errors.name"
+        @validate="validate('name')"
         />
       <BaseInput class="inputFields" id="emailField"
         label="Email"
         type="email"
-        v-model.lazy="email"
+        v-model.lazy="submission.email"
         :error="errors.email"
-
+        @validate="validate('email')"
         />
       <BaseInput class="inputFields"
         id="message"
         label="Message"
         type="text"
-
-        v-model="message"
+        v-model="submission.message"
         :error="errors.message"
+        @validate="validate('message')"
        />
       <button type="submit" >Submit</button>
     </form>
@@ -34,8 +35,13 @@
 // @ is an alias to /src
 import BaseInput from "@/components/BaseInput";
 import { v4 as uuidv4 } from 'uuid';
-import { useField, useForm } from 'vee-validate';
 import { object, string } from 'yup'
+
+const validationSchema = object({
+  name: string().required().matches(/^[A-ÅÆØa-æøå ]*$/, "Please enter valid name"),
+  email: string().email("Please enter a valid email").required(),
+  message: string().required("Please enter a message")
+})
 
 export default {
   name: "Feedback",
@@ -49,55 +55,29 @@ export default {
         name: '',
         email: '',
         message: '',
+      },
+      errors: {
+        name: '',
+        email: '',
+        message: ''
       }
-    }
-  },
-  setup() {
-    const validationSchema = object({
-      name: string().required().matches(/^[A-ÅÆØa-æøå ]*$/, "Please enter valid name"),
-      email: string().email("Please enter a valid email").required(),
-      message: string().required()
-    })
-
-    const { handleSubmit, errors} = useForm({
-      validationSchema
-    })
-
-    const { value: name} = useField('name')
-    const { value: email} = useField('email')
-    const { value: message} = useField('message')
-
-    const submit = handleSubmit((values) => {
-      console.log(values)
-    })
-
-    return {
-      email,
-      name,
-      message,
-      submit,
-      errors
     }
   },
   created() {
     this.$store.dispatch('fetchSubmissions')
     if(this.$store.state.user){
-      this.name = this.$store.state.user
+      this.submission.name = this.$store.state.user
     }
     if(this.$store.state.userEmail){
-      this.email = this.$store.state.userEmail
+      this.submission.email = this.$store.state.userEmail
     }
 
   },
   methods: {
-    onSubmit() {
+    sendFeedback() {
       const submission = {
         ...this.submission,
         id: uuidv4(),
-        name: this.name,
-        email: this.email,
-        message: this.message,
-
       }
       this.$store.dispatch('submitSubmission', submission)
           .then(() => {
@@ -112,13 +92,31 @@ export default {
               params: { error: error }
             })
           })
-    }
-  },
-  computed: {
-    isComplete () {
-      return this.submission.name && this.submission.email && this.submission.message
     },
-  },
+    onSubmit() {
+      validationSchema
+          .validate(this.submission, { abortEarly: false})
+          .then(() => {
+            this.errors = {};
+            this.sendFeedback()
+          })
+          .catch(error => {
+            error.inner.forEach(error => {
+              this.errors = { ...this.errors, [error.path]: error.message };
+            });
+          })
+    },
+    validate(field) {
+      validationSchema
+          .validateAt(field, this.submission)
+          .then(() => {
+            this.errors[field] = "";
+          })
+          .catch(error => {
+            this.errors[error.path] = error.message;
+          })
+    }
+  }
 }
 </script>
 
