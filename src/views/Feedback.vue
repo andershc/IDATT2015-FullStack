@@ -6,16 +6,14 @@
         label="Name"
         type="text"
         value="getName"
-        v-model.lazy="this.$store.state.user"
-        v-model="submission.name"
-        :error="nameError"
+        v-model="name"
+        :error="errors.name"
         />
       <BaseInput class="inputFields" id="emailField"
         label="Email"
         type="email"
-        v-model.lazy="this.$store.state.userEmail"
-        v-model="submission.email"
-        :error="emailError"
+        v-model.lazy="email"
+        :error="errors.email"
 
         />
       <BaseInput class="inputFields"
@@ -23,10 +21,10 @@
         label="Message"
         type="text"
 
-        v-model="submission.message"
-        :error="messageError"
+        v-model="message"
+        :error="errors.message"
        />
-      <button :disabled="!isComplete" type="submit">Submit</button>
+      <button type="submit" >Submit</button>
     </form>
 
   </div>
@@ -37,6 +35,8 @@
 import BaseInput from "@/components/BaseInput";
 import { v4 as uuidv4 } from 'uuid';
 import { useField, useForm } from 'vee-validate';
+import { object, string } from 'yup'
+
 
 export default {
   name: "Feedback",
@@ -50,60 +50,34 @@ export default {
         email: '',
         message: '',
         id: ''
-      },
-      nameIsValid: false,
-      emailIsValid: false,
-      messageIsValid: false
+      }
     }
   },
   setup() {
-    const errorMessage = 'This field is required'
-    const validations = {
-      name: (value) => {
-        if (value === undefined || value == null || !String(value).length){
-          return errorMessage
-        }
-        if (value.type !== String) {
-          return 'Name must be a string'
-        } else{
-          this.nameIsValid = true
-          return true
-        }
-      },
-      email: (value) => {
-        if (!value) {
-          return 'This field is required'
-        }
-        const regexEmailCheck = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        if (!regexEmailCheck.test(String(value).toLowerCase())) {
-          return 'Please enter a valid email address'
-        }
-        this.emailIsValid = true
-        return true
-      },
-      message: (value) => {
-        if (value === undefined || value === null || !String(value).length) {
-          return errorMessage
-        }
-        this.messageIsValid = true
-        return true
-      }
-    }
-    useForm({
-      validationSchema: validations
-    });
+    const validationSchema = object({
+      name: string().required().matches(/^[A-ÅÆØa-æøå ]*$/, "Please enter valid name"),
+      email: string().email("Please enter a valid email").required(),
+      message: string().required()
+    })
 
-    const { value: name, errorMessage: nameError } = useField('name')
-    const { value: email, errorMessage: emailError, handleChange } = useField('email')
-    const { value: message, errorMessage: messageError } = useField('message')
+    const { handleSubmit, errors} = useForm({
+      validationSchema
+    })
+
+    const { value: name} = useField('name')
+    const { value: email} = useField('email')
+    const { value: message} = useField('message')
+
+    const submit = handleSubmit((values) => {
+      console.log('submit', values)
+    })
+
     return {
       email,
-      emailError,
       name,
-      nameError,
       message,
-      messageError,
-      handleChange
+      submit,
+      errors
     }
   },
 
@@ -131,9 +105,9 @@ export default {
   computed: {
     isComplete () {
       return this.submission.name && this.submission.email && this.submission.message
-    }
-  }
-};
+    },
+  },
+}
 </script>
 
 <style>

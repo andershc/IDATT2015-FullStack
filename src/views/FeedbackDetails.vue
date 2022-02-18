@@ -5,7 +5,7 @@
     <p> Email: {{ submission.email }}</p>
     <p> Message: {{ submission.message }}</p>
     <footer>Thank you for contributing!</footer>
-    <button @click="done">Done</button>
+    <button @click="done" id="done">Done</button>
   </div>
 </template>
 
@@ -35,3 +35,6 @@ export default {
   }
 }
 </script>
+<style scoped>
+@import "./../styles/FeedbackDetails.css";
+</style>
