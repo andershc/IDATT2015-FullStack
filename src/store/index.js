@@ -1,4 +1,5 @@
 import { createStore } from "vuex";
+import FeedbackService from "@/services/FeedbackService";
 
 export default createStore({
   state: {
@@ -24,9 +25,17 @@ export default createStore({
   actions: {
     submitSubmission({commit}, submission) {
       console.log("Submission sent! " + submission.id)
-      commit('ADD_SUBMISSION', submission)
-      commit('SET_USER', submission.name)
-      commit('SET_USER_EMAIL', submission.email)
+      FeedbackService.submit(submission)
+          .then(() => {
+            commit('ADD_SUBMISSION', submission)
+            commit('SET_USER', submission.name)
+            commit('SET_USER_EMAIL', submission.email)
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      
+
 
     },
     fetchSubmission({ commit, state }, id) {

@@ -36,7 +36,7 @@ import BaseInput from "@/components/BaseInput";
 import { v4 as uuidv4 } from 'uuid';
 import { useField, useForm } from 'vee-validate';
 import { object, string } from 'yup'
-import axios from "axios";
+import FeedbackService from "@/services/FeedbackService";
 
 
 export default {
@@ -70,17 +70,9 @@ export default {
     const { value: message} = useField('message')
 
     const submit = handleSubmit((values) => {
-      axios
-          .post(
-              "https://my-json-server.typicode.com/andershc/IDATT2105-FullStack/submission",
-              values
-          )
-          .then(function (response) {
-            console.log("Response", response);
-          })
-          .catch(function (err) {
-            console.log("Error", err);
-          });
+      FeedbackService.submit(values).catch((error) => {
+        console.log(error)
+      });
     })
 
     return {
@@ -96,7 +88,10 @@ export default {
     onSubmit() {
       const submission = {
         ...this.submission,
-        id: uuidv4(),
+        name: this.name,
+        email: this.email,
+        message: this.message,
+        id: uuidv4()
       }
       this.$store.dispatch('submitSubmission', submission)
           .then(() => {
