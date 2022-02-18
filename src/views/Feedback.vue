@@ -36,8 +36,6 @@ import BaseInput from "@/components/BaseInput";
 import { v4 as uuidv4 } from 'uuid';
 import { useField, useForm } from 'vee-validate';
 import { object, string } from 'yup'
-import FeedbackService from "@/services/FeedbackService";
-
 
 export default {
   name: "Feedback",
@@ -70,9 +68,7 @@ export default {
     const { value: message} = useField('message')
 
     const submit = handleSubmit((values) => {
-      FeedbackService.submit(values).catch((error) => {
-        console.log(error)
-      });
+      console.log(values)
     })
 
     return {
@@ -93,6 +89,7 @@ export default {
         message: this.message,
         id: uuidv4()
       }
+      console.log(submission.name)
       this.$store.dispatch('submitSubmission', submission)
           .then(() => {
             this.$router.push({
