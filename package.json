@@ -3,14 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "vue-cli-service serve & json-server --watch db.json",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "axios": "^0.25.0",
     "core-js": "^3.6.5",
+    "faker": "^6.6.6",
     "get-stream": "^6.0.1",
+    "json-server": "^0.17.0",
+    "lodash": "^4.17.21",
     "vee-validate": "^4.5.8",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",

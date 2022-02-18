@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const apiClient = axios.create({
-    baseURL: 'https://my-json-server.typicode.com/andershc/IDATT2105-FullStack',
+    baseURL: 'http://localhost:3000',
     withCredentials: false,
     headers: {
         Accept: 'application/json',
@@ -19,4 +19,16 @@ export default {
     getSubmission(id) {
         return apiClient.get('/submissions/' + id)
     },
+    getName(){
+        return apiClient.get('/profile/name')
+    },
+    setName(){
+
+    },
+    getEmail(){
+        return apiClient.get('profile/email')
+    },
+    setEmail(){
+
+    }
 }

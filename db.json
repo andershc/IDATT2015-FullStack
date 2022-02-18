@@ -6,5 +6,9 @@
       "email": "etnavn@gmail.com",
       "message": "eeeeh"
     }
-  ]
+  ],
+  "profile": {
+    "name": "",
+    "email": ""
+  }
 }

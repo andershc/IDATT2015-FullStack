@@ -37,9 +37,6 @@ export default createStore({
           .catch(error => {
             console.log(error)
           })
-
-
-
     },
     fetchSubmissions({ commit }) {
       FeedbackService.getSubmissions()

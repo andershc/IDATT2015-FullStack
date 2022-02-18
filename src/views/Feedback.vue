@@ -92,7 +92,6 @@ export default {
         message: this.message,
 
       }
-      console.log(submission.name)
       this.$store.dispatch('submitSubmission', submission)
           .then(() => {
             this.$router.push({
