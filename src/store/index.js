@@ -30,13 +30,14 @@ export default createStore({
       console.log("Submission sent! " + submission.id)
       FeedbackService.postFeedback(submission)
           .then(() => {
-            commit('ADD_SUBMISSION', submission)
-            commit('SET_USER', submission.name)
-            commit('SET_USER_EMAIL', submission.email)
+              console.log("Successfully sent feedback to online database")
           })
           .catch(error => {
             console.log(error)
           })
+      commit('ADD_SUBMISSION', submission)
+      commit('SET_USER', submission.name)
+      commit('SET_USER_EMAIL', submission.email)
     },
     fetchSubmissions({ commit, state }) {
       FeedbackService.getSubmissions()
