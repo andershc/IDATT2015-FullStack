@@ -3,6 +3,7 @@
   <div id="flashMessage" v-if="this.$store.state.flashMessage"> {{ this.$store.state.flashMessage }}</div>
   <div id="nav">
     <router-link to="/">Home</router-link> |
+    <router-link to="/login">Login</router-link> |
     <router-link to="/feedback">Feedback</router-link>
   </div>
   <router-view />

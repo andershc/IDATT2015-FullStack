@@ -5,7 +5,6 @@
       <BaseInput class="inputFields" id="name"
         label="Name"
         type="text"
-        value="getName"
         v-model="submission.name"
         :error="errors.name"
         @validate="validate('name')"
@@ -119,8 +118,6 @@ export default {
           .catch(error => {
             this.errors[error.path] = error.message;
           })
-    },
-    showMessage() {
     }
   }
 }

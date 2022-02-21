@@ -4,7 +4,7 @@
       v-if="label"
       :for="uuid"
   >
-    *{{ label }}:
+    {{ label }}:
   </label>
   <input
       class="baseInputField"

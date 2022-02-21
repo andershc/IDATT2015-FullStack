@@ -29,6 +29,13 @@ const routes = [
     props: true,
     component: () =>
         import("../views/FeedbackDetails")
+  },
+  {
+    path: '/login',
+    name: 'LoginPage',
+    props: true,
+    component: () =>
+        import("../views/LoginPage")
   }
 ];
 

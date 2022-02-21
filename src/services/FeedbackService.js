@@ -30,5 +30,14 @@ export default {
     },
     setEmail(newEmail){
         return apiClient.post('/profile', {email: newEmail})
+    },
+    getUsers(){
+        return apiClient.get('/users')
+    },
+    postUser(user){
+        return apiClient.post('/users', user)
+    },
+    getUser(username){
+        return apiClient.get('/users/' + username)
     }
 }

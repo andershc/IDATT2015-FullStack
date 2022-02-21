@@ -3,11 +3,14 @@ import FeedbackService from "@/services/FeedbackService";
 
 export default createStore({
   state: {
-    user: '',
+    name: '',
     userEmail: '',
     submissions: [],
     submission: {},
-    flashMessage: ''
+    flashMessage: '',
+    registered: false,
+    users: [],
+    user: {}
   },
   mutations: {
     ADD_SUBMISSION(state, submission) {
@@ -16,8 +19,8 @@ export default createStore({
     SET_SUBMISSION(state, submission) {
       state.submission = submission;
     },
-    SET_USER(state, name) {
-      state.user = name
+    SET_NAME(state, name) {
+      state.name = name
     },
     SET_USER_EMAIL(state, email) {
       state.userEmail = email
@@ -27,6 +30,15 @@ export default createStore({
     },
     SET_FLASHMESSAGE(state, message){
       state.flashMessage = message;
+    },
+    SET_REGISTERED(state, registered){
+      state.registered = registered;
+    },
+    SET_USERS(state, users){
+      state.users = users;
+    },
+    SET_USER(state, user){
+      state.user = user;
     }
   },
   actions: {
@@ -65,6 +77,32 @@ export default createStore({
             })
             .catch(error => {
               console.log("Submission " + id + " not found" + error)
+            })
+      }
+    },
+    fetchUsers({commit, state}){
+      FeedbackService.getUsers()
+          .then(response => {
+            commit('SET_USERS', response.data)
+            console.log("Successfully fetched users from server " + state.users.length)
+          })
+          .catch(error => {
+            console.log("could not get submissions" + error)
+          })
+    },
+    fetchUser({ commit, state }, username) {
+      const existingUser = state.users.find(user => user.username === username)
+      if (existingUser) {
+        commit('SET_USER', existingUser)
+      } else {
+        FeedbackService.getUser(username)
+            .then(response => {
+              commit('SET_SUBMISSION', response.data)
+              return true
+            })
+            .catch(error => {
+              console.log("User " + username + " not found" + error)
+              return false
             })
       }
     },
