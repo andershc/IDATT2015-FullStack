@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const apiClient = axios.create({
-    baseURL: 'https://my-json-server.typicode.com/andershc/IDATT2105-FullStack',
+    baseURL: 'http://localhost:3000',
     withCredentials: false,
     headers: {
         Accept: 'application/json',
@@ -36,8 +36,5 @@ export default {
     },
     postUser(user){
         return apiClient.post('/users', user)
-    },
-    getUser(username){
-        return apiClient.get('/users/' + username)
     }
 }

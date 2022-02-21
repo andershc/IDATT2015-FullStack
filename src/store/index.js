@@ -8,9 +8,9 @@ export default createStore({
     submissions: [],
     submission: {},
     flashMessage: '',
-    registered: false,
+    loginStatus: '',
     users: [],
-    user: {}
+    user: {},
   },
   mutations: {
     ADD_SUBMISSION(state, submission) {
@@ -31,21 +31,24 @@ export default createStore({
     SET_FLASHMESSAGE(state, message){
       state.flashMessage = message;
     },
-    SET_REGISTERED(state, registered){
-      state.registered = registered;
+    SET_LOGINSTATUS(state, loginStatus){
+      state.registered = loginStatus;
     },
     SET_USERS(state, users){
       state.users = users;
     },
     SET_USER(state, user){
       state.user = user;
-    }
+    },
+    ADD_USER(state, user) {
+      state.users.push(user)
+    },
   },
   actions: {
     submitSubmission({commit}, submission) {
       console.log("Submission sent! " + submission.id)
       commit('ADD_SUBMISSION', submission)
-      commit('SET_USER', submission.name)
+      commit('SET_NAME', submission.name)
       commit('SET_USER_EMAIL', submission.email)
       FeedbackService.postFeedback(submission)
           .then(() => {
@@ -84,6 +87,7 @@ export default createStore({
       FeedbackService.getUsers()
           .then(response => {
             commit('SET_USERS', response.data)
+            console.log(response.data)
             console.log("Successfully fetched users from server " + state.users.length)
           })
           .catch(error => {
@@ -95,17 +99,20 @@ export default createStore({
       if (existingUser) {
         commit('SET_USER', existingUser)
       } else {
-        FeedbackService.getUser(username)
-            .then(response => {
-              commit('SET_SUBMISSION', response.data)
-              return true
-            })
-            .catch(error => {
-              console.log("User " + username + " not found" + error)
-              return false
-            })
+        console.log("Error fetching user")
       }
     },
+    submitUser({commit}, user){
+      console.log("Submission sent! " + user.username + " " + user.password)
+      commit('ADD_USER', user)
+      FeedbackService.postUser(user)
+          .then(() => {
+            console.log("Successfully registered in db")
+          })
+          .catch(error => {
+            console.log(error)
+          })
+    }
   },
   modules: {},
 });

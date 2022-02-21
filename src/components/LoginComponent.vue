@@ -11,31 +11,32 @@
       <label id="passwordLabel">Password: </label>
       <textarea v-model="user.password"></textarea>
       <button v-on:click="handleClickSignin_2">Sign in</button>
-      <label id="loginstatusLabel">{{loginStatus}}</label>
+
     </div>
+    <div v-if="loginStatus">{{loginStatus}}
+    <router-link v-if="loginStatus" to="/register">Register</router-link>
+    </div>
+
   </div>
 </template>
 
 
 <script>
-import axios from 'axios';
+import router from "@/router";
 
 export default {
   name: 'LoginComponent',
   methods: {
-    async handleClickSignin (){
-      //alert("You entered, username: " + this.username);
-      const loginRequest = { username:this.username, password: this.password };
-      const loginResponse = await axios.post("http://localhost:8085/demo/login", loginRequest);
-      console.log(loginResponse);
-      alert("Login: " + loginResponse.data.loginStatus);
-    },
     handleClickSignin_2 () {
-      if(this.$store.dispatch("fetchUser", this.user.username)){
-        this.user.loginStatus = "logged in"
-        console.log("Logged in")
-      } else {
-        this.user.loginStatus = "Don't have an account? Register here"
+      this.$store.dispatch("fetchUser", this.user.username)
+      const fetchedUser = this.$store.state.user
+      if(fetchedUser.username === this.user.username && fetchedUser.password === this.user.password){
+        router.push('/')
+      } else if(fetchedUser.username === this.user.username){
+        this.loginStatus = "Wrong password or username. Don't have an account?"
+        console.log("Wrong password")
+      } else{
+        this.loginStatus = "Don't have an account?"
         console.log("Not an existing user")
       }
     },
@@ -46,12 +47,14 @@ export default {
       user:{
         username: '',
         password: '',
-        loginStatus: '',
-      }
+      },
+      loginStatus: '',
+
     }
   },
   created() {
     this.$store.dispatch('fetchUsers')
+    this.$store.commit('SET_LOGINSTATUS', "")
   }
 
 }
@@ -76,6 +79,7 @@ export default {
   flex-direction: row;
   align-items: center;
   column-gap: 20px;
+  min-width: 40px;
 }
 
 #usernameLabel, #passwordLabel {

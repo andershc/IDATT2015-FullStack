@@ -36,6 +36,13 @@ const routes = [
     props: true,
     component: () =>
         import("../views/LoginPage")
+  },
+  {
+    path: '/register',
+    name: 'RegisterPage',
+    props: true,
+    component: () =>
+        import("../views/RegisterPage")
   }
 ];
 

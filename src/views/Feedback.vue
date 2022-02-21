@@ -24,7 +24,7 @@
         :error="errors.message"
         @validate="validate('message')"
        />
-      <button type="submit" >Submit</button>
+      <button id="submit" type="submit" >Submit</button>
     </form>
 
   </div>
@@ -64,8 +64,8 @@ export default {
   },
   created() {
     this.$store.dispatch('fetchSubmissions')
-    if(this.$store.state.user){
-      this.submission.name = this.$store.state.user
+    if(this.$store.state.name){
+      this.submission.name = this.$store.state.name
     }
     if(this.$store.state.userEmail){
       this.submission.email = this.$store.state.userEmail
@@ -123,7 +123,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #inputs {
   display: flex;
   flex-direction: column;
@@ -139,14 +139,14 @@ export default {
 .inputFields {
   margin: 1em;
 }
-button{
+#submit {
   max-width: 8em;
   margin-left: 80%;
   background: #f0be19;
   margin-top: 0.5em;
 
 }
-button:disabled{
+#submit:disabled{
   background: #78797e;
 }
 </style>

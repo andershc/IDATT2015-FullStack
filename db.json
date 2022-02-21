@@ -127,6 +127,15 @@
     "name": "Navn"
   },
   "users": [
-
+    {
+      "id": "1",
+      "username": "anders",
+      "password": "password"
+    },
+    {
+      "id": "fb572899-2298-4f24-8b6f-eebcae6cd4dc",
+      "username": "test",
+      "password": "aaa"
+    }
   ]
 }
