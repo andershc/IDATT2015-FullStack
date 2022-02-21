@@ -13,6 +13,10 @@
 export default {
   props: ['id'],
   created() {
+    this.$store.commit('SET_FLASHMESSAGE', "Feedback sent!")
+    setTimeout(() => {
+      this.$store.commit('SET_FLASHMESSAGE', '')
+    }, 3000)
     this.$store.dispatch('fetchSubmission', this.id)
         .catch(error => {
           this.$router.push({

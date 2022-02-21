@@ -6,7 +6,8 @@ export default createStore({
     user: '',
     userEmail: '',
     submissions: [],
-    submission: {}
+    submission: {},
+    flashMessage: ''
   },
   mutations: {
     ADD_SUBMISSION(state, submission) {
@@ -23,6 +24,9 @@ export default createStore({
     },
     SET_SUBMISSIONS(state, submissions){
       state.submissions = submissions
+    },
+    SET_FLASHMESSAGE(state, message){
+      state.flashMessage = message;
     }
   },
   actions: {
@@ -63,7 +67,7 @@ export default createStore({
               console.log("Submission " + id + " not found" + error)
             })
       }
-    }
+    },
   },
   modules: {},
 });

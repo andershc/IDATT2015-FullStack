@@ -79,19 +79,23 @@ export default {
         ...this.submission,
         id: uuidv4(),
       }
-      this.$store.dispatch('submitSubmission', submission)
-          .then(() => {
-            this.$router.push({
-              name: 'FeedbackDetails',
-              params: { id: submission.id }
+      this.$store.commit('SET_FLASHMESSAGE', "Sending feedback...")
+      setTimeout(() => {
+        this.$store.dispatch('submitSubmission', submission)
+            .then(() => {
+              this.$router.push({
+                name: 'FeedbackDetails',
+                params: { id: submission.id }
+              })
             })
-          })
-          .catch(error => {
-            this.$router.push({
-              name: 'ErrorDisplay',
-              params: { error: error }
+            .catch(error => {
+              this.$router.push({
+                name: 'ErrorDisplay',
+                params: { error: error }
+              })
             })
-          })
+      }, 1500)
+
     },
     onSubmit() {
       validationSchema
@@ -115,6 +119,8 @@ export default {
           .catch(error => {
             this.errors[error.path] = error.message;
           })
+    },
+    showMessage() {
     }
   }
 }
