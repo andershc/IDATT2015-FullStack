@@ -1,31 +1,22 @@
 <template>
-  <label
-      id="label"
-      v-if="label"
-      :for="uuid"
-  >
-    {{ label }}:
-  </label>
+  <label id="label" v-if="label" :for="uuid"> {{ label }}: </label>
   <input
-      class="baseInputField"
-      v-bind="{
+    class="baseInputField"
+    v-bind="{
       ...$attrs,
-      onInput: updateValue
+      onInput: updateValue,
     }"
-      :id="uuid"
-      :value="modelValue"
-      :placeholder="label"
-      :aria-describedby="error ? `${uuid}-error` : null"
-      :aria-invalid="!!error"
-      :class="{ error }"
-      @input="$emit('update:modelValue', $event.target.value)"
-      @blur="$emit('validate')"
-      @keypress="$emit('validate')"
-  >
-  <BaseErrorMessage
-      v-if="error"
-      :id="`${uuid}-error`"
-  >
+    :id="uuid"
+    :value="modelValue"
+    :placeholder="label"
+    :aria-describedby="error ? `${uuid}-error` : null"
+    :aria-invalid="!!error"
+    :class="{ error }"
+    @input="$emit('update:modelValue', $event.target.value)"
+    @blur="$emit('validate')"
+    @keypress="$emit('validate')"
+  />
+  <BaseErrorMessage v-if="error" :id="`${uuid}-error`">
     {{ error }}
   </BaseErrorMessage>
 </template>
@@ -35,7 +26,6 @@ import UniqueId from "../features/UniqueId.js";
 import SetupFormComponent from "../features/SetupFormComponent";
 import BaseErrorMessage from "@/components/BaseErrorMessage";
 
-
 export default {
   name: "BaseInput",
   components: {
@@ -44,7 +34,7 @@ export default {
   props: {
     label: {
       type: String,
-      default: ''
+      default: "",
     },
     error: {
       type: String,
@@ -52,18 +42,18 @@ export default {
     },
     modelValue: {
       type: [String, Number],
-      default: ''
-    }
+      default: "",
+    },
   },
   setup(props, context) {
-    const {updateValue} = SetupFormComponent(props, context);
+    const { updateValue } = SetupFormComponent(props, context);
     const uuid = UniqueId().getId();
     return {
       updateValue,
       uuid,
     };
-  }
-}
+  },
+};
 </script>
 <style>
 .baseInputField {
@@ -74,7 +64,7 @@ export default {
   background: white;
   padding: 0.5em;
 }
-.baseInputField:invalid{
+.baseInputField:invalid {
   border-color: red;
   border-width: 0.1em;
 }

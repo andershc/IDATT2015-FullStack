@@ -17,33 +17,29 @@ const routes = [
       import(/* webpackChunkName: "about" */ "../views/Feedback.vue"),
   },
   {
-    path: '/error/:error',
-    name: 'ErrorDisplay',
+    path: "/error/:error",
+    name: "ErrorDisplay",
     props: true,
-    component: () =>
-        import("../views/ErrorDisplay")
+    component: () => import("../views/ErrorDisplay"),
   },
   {
-    path: '/feedbackSubmission/:id',
-    name: 'FeedbackDetails',
+    path: "/feedbackSubmission/:id",
+    name: "FeedbackDetails",
     props: true,
-    component: () =>
-        import("../views/FeedbackDetails")
+    component: () => import("../views/FeedbackDetails"),
   },
   {
-    path: '/login',
-    name: 'LoginPage',
+    path: "/login",
+    name: "LoginPage",
     props: true,
-    component: () =>
-        import("../views/LoginPage")
+    component: () => import("../views/LoginPage"),
   },
   {
-    path: '/register',
-    name: 'RegisterPage',
+    path: "/register",
+    name: "RegisterPage",
     props: true,
-    component: () =>
-        import("../views/RegisterPage")
-  }
+    component: () => import("../views/RegisterPage"),
+  },
 ];
 
 const router = createRouter({

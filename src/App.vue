@@ -1,6 +1,8 @@
 <template>
   <h1>A Brilliant Calculator</h1>
-  <div id="flashMessage" v-if="this.$store.state.flashMessage"> {{ this.$store.state.flashMessage }}</div>
+  <div id="flashMessage" v-if="this.$store.state.flashMessage">
+    {{ this.$store.state.flashMessage }}
+  </div>
   <div id="nav">
     <router-link to="/">Home</router-link> |
     <router-link to="/login">Login</router-link> |
@@ -8,7 +10,6 @@
   </div>
   <router-view />
 </template>
-
 
 <style>
 #app {
@@ -21,7 +22,7 @@
 
 @keyframes yellowfade {
   from {
-    background: #9AC2C9;
+    background: #9ac2c9;
   }
   to {
     background: transparent;
@@ -31,7 +32,7 @@
 #flashMessage {
   animation-name: yellowfade;
   animation-duration: 1.5s;
-  color: whitesmoke
+  color: whitesmoke;
 }
 
 #nav {

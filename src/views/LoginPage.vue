@@ -5,14 +5,11 @@
 <script>
 import LoginComponent from "@/components/LoginComponent";
 export default {
-  name: 'MyRootComponent',
+  name: "MyRootComponent",
   components: {
     LoginComponent,
-  }
-}
-
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

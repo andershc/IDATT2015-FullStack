@@ -5,59 +5,60 @@
     </div>
     <div id="username">
       <label id="usernameLabel">Username:</label>
-      <textarea v-model="user.username"></textarea>
+      <textarea data-testid="usernameField" v-model="user.username"></textarea>
     </div>
     <div id="password">
       <label id="passwordLabel">Password: </label>
-      <textarea v-model="user.password"></textarea>
-      <button v-on:click="handleClickSignin_2">Sign in</button>
-
+      <textarea data-testid="passwordField" v-model="user.password"></textarea>
+      <button data-testid="submit" type="submit" v-on:click="handleSignIn">Sign in</button>
     </div>
-    <div v-if="loginStatus">{{loginStatus}}
-    <router-link v-if="loginStatus" to="/register">Register</router-link>
-    </div>
+    <label data-testid="loginStatusField">
+      {{ loginStatus }}</label>
+      <router-link  id="link" v-if="loginStatus" to="/register">Register</router-link>
 
   </div>
 </template>
 
-
 <script>
 import router from "@/router";
+import store from "@/store";
 
 export default {
-  name: 'LoginComponent',
+  name: "LoginComponent",
   methods: {
-    handleClickSignin_2 () {
-      this.$store.dispatch("fetchUser", this.user.username)
-      const fetchedUser = this.$store.state.user
-      if(fetchedUser.username === this.user.username && fetchedUser.password === this.user.password){
-        router.push('/')
-      } else if(fetchedUser.username === this.user.username){
-        this.loginStatus = "Wrong password or username. Don't have an account?"
-        console.log("Wrong password")
-      } else{
-        this.loginStatus = "Don't have an account?"
-        console.log("Not an existing user")
+    handleSignIn() {
+      console.log(this.user.password + " " + this.user.username)
+      store.dispatch("fetchUser", this.user.username);
+      const fetchedUser = store.state.user;
+      if (
+        fetchedUser.username === this.user.username &&
+        fetchedUser.password === this.user.password
+      ) {
+        this.loginStatus="Success"
+        router.push("/");
+      } else if (fetchedUser.username === this.user.username) {
+        this.loginStatus = "Failed";
+        console.log("Wrong password");
+      } else {
+        this.loginStatus = "Failed";
+        console.log("Not an existing user");
       }
     },
-
   },
   data() {
     return {
-      user:{
-        username: '',
-        password: '',
+      user: {
+        username: "",
+        password: "",
       },
-      loginStatus: '',
-
-    }
+      loginStatus: "",
+    };
   },
   created() {
-    this.$store.dispatch('fetchUsers')
-    this.$store.commit('SET_LOGINSTATUS', "")
-  }
-
-}
+    store.dispatch("fetchUsers");
+    store.commit("SET_LOGINSTATUS", "");
+  },
+};
 </script>
 
 <style scoped>
@@ -65,7 +66,6 @@ export default {
   display: grid;
   justify-content: center;
   margin: 40px;
-
 }
 
 #loginTitle {
@@ -74,7 +74,8 @@ export default {
   margin-bottom: 20px;
 }
 
-#username, #password {
+#username,
+#password {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -82,12 +83,14 @@ export default {
   min-width: 40px;
 }
 
-#usernameLabel, #passwordLabel {
+#usernameLabel,
+#passwordLabel {
   width: 100px;
 }
-textarea{
+textarea {
   resize: none;
 }
-
+#link {
+  color: white;
+}
 </style>
-

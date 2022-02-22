@@ -2,32 +2,12 @@
   <form @submit.prevent="onRegister">
     <h1>Register yourself</h1>
     <div id="inputs">
-      <BaseInput
-        label="Full name"
-        type="text"
-      />
-      <BaseInput
-          label="Address"
-          type="text"
-      />
-      <BaseInput
-        label="Username"
-        v-model="user.username"
-        type="text"
-      />
-      <BaseInput
-          label="Password"
-          type="text"
-          v-model="user.password"
-      />
-      <BaseInput
-          label="Email"
-          type="text"
-      />
-      <BaseInput
-          label="Phone"
-          type="tel"
-      />
+      <BaseInput label="Full name" type="text" />
+      <BaseInput label="Address" type="text" />
+      <BaseInput label="Username" v-model="user.username" type="text" />
+      <BaseInput label="Password" type="text" v-model="user.password" />
+      <BaseInput label="Email" type="text" />
+      <BaseInput label="Phone" type="tel" />
     </div>
     <button type="submit">Register</button>
   </form>
@@ -35,7 +15,7 @@
 
 <script>
 import BaseInput from "@/components/BaseInput";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 export default {
   name: "RegisterPage",
@@ -43,33 +23,34 @@ export default {
     BaseInput,
   },
   data() {
-    return{
+    return {
       user: {
-        id: '',
-        username: '',
-        password: ''
-      }
-    }
+        id: "",
+        username: "",
+        password: "",
+      },
+    };
   },
   methods: {
     onRegister() {
       const user = {
         ...this.user,
         id: uuidv4(),
-      }
-      this.$store.dispatch('submitUser', user)
+      };
+      this.$store
+        .dispatch("submitUser", user)
         .then(() => {
-          this.$router.push('/login')
+          this.$router.push("/login");
         })
-        .catch(error => {
+        .catch((error) => {
           this.$router.push({
-            name: 'ErrorDisplay',
-            params: { error: error }
-          })
-        })
-    }
-  }
-}
+            name: "ErrorDisplay",
+            params: { error: error },
+          });
+        });
+    },
+  },
+};
 </script>
 
 <style scoped>

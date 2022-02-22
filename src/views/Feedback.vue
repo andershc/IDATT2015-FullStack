@@ -2,45 +2,51 @@
   <div class="Feedback">
     <h1>Please leave your feedback!</h1>
     <form id="inputs" @submit.prevent="onSubmit">
-      <BaseInput class="inputFields" id="name"
+      <BaseInput
+        class="inputFields"
+        id="name"
         label="Name"
         type="text"
         v-model="submission.name"
         :error="errors.name"
         @validate="validate('name')"
-        />
-      <BaseInput class="inputFields" id="emailField"
+      />
+      <BaseInput
+        class="inputFields"
+        id="emailField"
         label="Email"
         type="email"
         v-model.lazy="submission.email"
         :error="errors.email"
         @validate="validate('email')"
-        />
-      <BaseInput class="inputFields"
+      />
+      <BaseInput
+        class="inputFields"
         id="message"
         label="Message"
         type="text"
         v-model="submission.message"
         :error="errors.message"
         @validate="validate('message')"
-       />
-      <button id="submit" type="submit" >Submit</button>
+      />
+      <button id="submit" type="submit">Submit</button>
     </form>
-
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import BaseInput from "@/components/BaseInput";
-import { v4 as uuidv4 } from 'uuid';
-import { object, string } from 'yup'
+import { v4 as uuidv4 } from "uuid";
+import { object, string } from "yup";
 
 const validationSchema = object({
-  name: string().required().matches(/^[A-ÅÆØa-æøå ]*$/, "Please enter valid name"),
+  name: string()
+    .required()
+    .matches(/^[A-ÅÆØa-æøå ]*$/, "Please enter valid name"),
   email: string().email("Please enter a valid email").required(),
-  message: string().required("Please enter a message")
-})
+  message: string().required("Please enter a message"),
+});
 
 export default {
   name: "Feedback",
@@ -50,77 +56,76 @@ export default {
   data() {
     return {
       submission: {
-        id: '',
-        name: '',
-        email: '',
-        message: '',
+        id: "",
+        name: "",
+        email: "",
+        message: "",
       },
       errors: {
-        name: '',
-        email: '',
-        message: ''
-      }
-    }
+        name: "",
+        email: "",
+        message: "",
+      },
+    };
   },
   created() {
-    this.$store.dispatch('fetchSubmissions')
-    if(this.$store.state.name){
-      this.submission.name = this.$store.state.name
+    this.$store.dispatch("fetchSubmissions");
+    if (this.$store.state.name) {
+      this.submission.name = this.$store.state.name;
     }
-    if(this.$store.state.userEmail){
-      this.submission.email = this.$store.state.userEmail
+    if (this.$store.state.userEmail) {
+      this.submission.email = this.$store.state.userEmail;
     }
-
   },
   methods: {
     sendFeedback() {
       const submission = {
         ...this.submission,
         id: uuidv4(),
-      }
-      this.$store.commit('SET_FLASHMESSAGE', "Sending feedback...")
+      };
+      this.$store.commit("SET_FLASHMESSAGE", "Sending feedback...");
       setTimeout(() => {
-        this.$store.dispatch('submitSubmission', submission)
-            .then(() => {
-              this.$router.push({
-                name: 'FeedbackDetails',
-                params: { id: submission.id }
-              })
-            })
-            .catch(error => {
-              this.$router.push({
-                name: 'ErrorDisplay',
-                params: { error: error }
-              })
-            })
-      }, 1500)
-
+        this.$store
+          .dispatch("submitSubmission", submission)
+          .then(() => {
+            this.$router.push({
+              name: "FeedbackDetails",
+              params: { id: submission.id },
+            });
+          })
+          .catch((error) => {
+            this.$router.push({
+              name: "ErrorDisplay",
+              params: { error: error },
+            });
+          });
+      }, 1500);
     },
     onSubmit() {
       validationSchema
-          .validate(this.submission, { abortEarly: false})
-          .then(() => {
-            this.errors = {};
-            this.sendFeedback()
-          })
-          .catch(error => {
-            error.inner.forEach(error => {
-              this.errors = { ...this.errors, [error.path]: error.message };
-            });
-          })
+        .validate(this.submission, { abortEarly: false })
+        .then(() => {
+          this.errors = {};
+          this.sendFeedback();
+        })
+        .catch((error) => {
+          error.inner.forEach((error) => {
+            this.errors = { ...this.errors, [error.path]: error.message };
+          });
+        });
     },
     validate(field) {
       validationSchema
-          .validateAt(field, this.submission)
-          .then(() => {
-            this.errors[field] = "";
-          })
-          .catch(error => {
-            this.errors[error.path] = error.message;
-          })
-    }
-  }
-}
+        .validateAt(field, this.submission)
+        .then(() => {
+          this.errors[field] = "";
+        })
+        .catch((error) => {
+          this.errors[error.path] = error.message;
+        });
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -133,8 +138,7 @@ export default {
 }
 
 #message {
-  height:2em;
-
+  height: 2em;
 }
 .inputFields {
   margin: 1em;
@@ -144,9 +148,8 @@ export default {
   margin-left: 80%;
   background: #f0be19;
   margin-top: 0.5em;
-
 }
-#submit:disabled{
+#submit:disabled {
   background: #78797e;
 }
 </style>
