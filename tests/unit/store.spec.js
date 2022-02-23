@@ -1,22 +1,32 @@
-import { createLocalVue } from '@vue/test-utils'
-import Vuex from 'vuex'
 import store from '@/store'
-import { cloneDeep } from 'lodash'
 
-test('increments "count" value when "increment" is committed', () => {
-    const localVue = createLocalVue()
-    localVue.use(Vuex)
-    const store = new Vuex.Store(cloneDeep(store))
-    expect(store.state.count).toBe(0)
-    store.commit('increment')
-    expect(store.state.count).toBe(1)
-})
-
-test('updates "evenOrOdd" getter when "increment" is committed', () => {
-    const localVue = createLocalVue()
-    localVue.use(Vuex)
-    const store = new Vuex.Store(cloneDeep(store))
-    expect(store.getters.evenOrOdd).toBe('even')
-    store.commit('increment')
-    expect(store.getters.evenOrOdd).toBe('odd')
+describe('testing store', () => {
+    test('adding a user', async() => {
+        const testUser = { username:"name", password: "password" };
+        await store.commit('ADD_USER', testUser)
+        const received = store.state.users.pop()
+        expect(received).toStrictEqual(testUser)
+    })
+    test('getting a user that does not exist or list is empty', async() => {
+        const received = store.state.users.pop()
+        expect(received).toBeUndefined()
+    })
+    test('Setting a current user', async() => {
+        const testUser = { username:"name", password: "password" };
+        await store.commit('SET_USER', testUser)
+        const received = store.state.user
+        expect(received).toStrictEqual(testUser)
+    })
+    test('Setting users', async() => {
+        const testUser = { username:"name", password: "password" };
+        const testUser1 = { username:"name1", password: "password1" };
+        const testUser2 = { username:"name2", password: "password2" };
+        const users = [];
+        users.push(testUser1)
+        users.push(testUser2)
+        users.push(testUser)
+        await store.commit('SET_USERS', users)
+        const received = store.state.users.length
+        expect(received).toEqual(users.length)
+    })
 })
