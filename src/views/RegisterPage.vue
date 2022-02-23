@@ -1,21 +1,39 @@
 <template>
-  <form @submit.prevent="onRegister">
     <h1>Register yourself</h1>
     <div id="inputs">
       <BaseInput label="Full name" type="text" />
       <BaseInput label="Address" type="text" />
-      <BaseInput label="Username" v-model="user.username" type="text" />
-      <BaseInput label="Password" type="text" v-model="user.password" />
+      <div id="username" class="input">
+        <label>Username</label>
+        <input
+            placeholder="Username"
+            data-testid="usernameRegistrationField"
+            v-model="user.username"
+            type="text"
+        />
+      </div>
+      <div id="password" class="input">
+        <label>Password</label>
+        <input
+            placeholder="password"
+            data-testid="passwordRegistrationField"
+            type="text"
+            v-model="user.password"
+        />
+      </div>
+
       <BaseInput label="Email" type="text" />
       <BaseInput label="Phone" type="tel" />
     </div>
-    <button type="submit">Register</button>
-  </form>
+    <button data-testid="submit" @click="onRegister" id="register" type="submit">Register</button>
+    <label data-testid="registerStatusField" id="status" v-if="registerStatus">{{registerStatus}}</label>
 </template>
 
 <script>
 import BaseInput from "@/components/BaseInput";
 import { v4 as uuidv4 } from "uuid";
+import store from '@/store'
+import router from "@/router";
 
 export default {
   name: "RegisterPage",
@@ -25,10 +43,11 @@ export default {
   data() {
     return {
       user: {
-        id: "",
-        username: "",
-        password: "",
+        id: '',
+        username: '',
+        password: '',
       },
+      registerStatus: ''
     };
   },
   methods: {
@@ -37,17 +56,22 @@ export default {
         ...this.user,
         id: uuidv4(),
       };
-      this.$store
-        .dispatch("submitUser", user)
-        .then(() => {
-          this.$router.push("/login");
-        })
-        .catch((error) => {
-          this.$router.push({
-            name: "ErrorDisplay",
-            params: { error: error },
+      if(!(user.username === '' || user.password === '')){
+        store
+          .dispatch("submitUser", user)
+          .then(() => {
+            setTimeout(() =>
+              router.push("/login").catch((error) => {
+                router.push({
+                  name: "ErrorDisplay",
+                  params: { error: error },
+                })
+                  }), 100
+              )
           });
-        });
+      } else{
+        this.registerStatus = "failed"
+      }
     },
   },
 };
@@ -57,5 +81,33 @@ export default {
 #inputs {
   display: flex;
   flex-direction: column;
+  max-width: 400px;
+  width: 100%;
+  margin: auto;
+}
+#register {
+  max-width: 8em;
+  margin-left: 29%;
+  background: #f0be19;
+  margin-top: 0.5em;
+  border-radius: 10px;
+  padding: 0.5em 1em 0.5em 1em
+}
+
+#status {
+  color: red;
+}
+
+.input {
+  text-align: left;
+  font-size: 1em;
+  color: black;
+  background: white;
+  padding: 0.5em;
+  max-width: 50%;
+  margin-left: 35%;
+}
+::placeholder {
+  color: darkgray;
 }
 </style>

@@ -1,21 +1,30 @@
 <template>
-  <label id="label" v-if="label" :for="uuid"> {{ label }}: </label>
-  <input
-    class="baseInputField"
-    v-bind="{
+  <div id="inputWithLabel">
+    <div>
+      <label id="label" v-if="label" :for="uuid"> {{ label }}: </label>
+    </div>
+    <div>
+      <input
+        data-testid="inputField"
+        class="baseInputField"
+        v-bind="{
       ...$attrs,
       onInput: updateValue,
     }"
-    :id="uuid"
-    :value="modelValue"
-    :placeholder="label"
-    :aria-describedby="error ? `${uuid}-error` : null"
-    :aria-invalid="!!error"
-    :class="{ error }"
-    @input="$emit('update:modelValue', $event.target.value)"
-    @blur="$emit('validate')"
-    @keypress="$emit('validate')"
-  />
+        :id="uuid"
+        :value="modelValue"
+        :placeholder="label"
+        :aria-describedby="error ? `${uuid}-error` : null"
+        :aria-invalid="!!error"
+        :class="{ error }"
+        @input="$emit('update:modelValue', $event.target.value)"
+        @blur="$emit('validate')"
+        @keypress="$emit('validate')"
+    />
+    </div>
+
+  </div>
+
   <BaseErrorMessage v-if="error" :id="`${uuid}-error`">
     {{ error }}
   </BaseErrorMessage>
@@ -55,12 +64,11 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
 .baseInputField {
   text-align: left;
   font-size: 1em;
   color: black;
-  resize: none;
   background: white;
   padding: 0.5em;
 }
@@ -74,6 +82,19 @@ export default {
 }
 
 #label {
-  text-align: left;
+  text-align: right;
+  align-content: end;
+  position: absolute;
+  top: 50%;
+  left: 20%;
+  transform: translate(-50%, -50%);
+  width: 5em;
+
+}
+#inputWithLabel {
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 0.5em;
+  position: relative;
 }
 </style>
