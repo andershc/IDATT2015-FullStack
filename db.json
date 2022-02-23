@@ -141,6 +141,11 @@
       "id": "0552454d-50f0-4d57-bafe-8539932ff630",
       "username": "TEST2",
       "password": "123"
+    },
+    {
+      "username": "aname",
+      "password": "apassword",
+      "id": "XIfHlcR"
     }
   ]
 }
