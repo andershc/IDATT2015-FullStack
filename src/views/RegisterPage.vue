@@ -3,23 +3,33 @@
     <div id="inputs">
       <BaseInput label="Full name" type="text" />
       <BaseInput label="Address" type="text" />
-      <div id="username" class="input">
-        <label>Username</label>
-        <input
-            placeholder="Username"
-            data-testid="usernameRegistrationField"
-            v-model="user.username"
-            type="text"
-        />
+      <div id="username" class="inputWithLabel">
+        <div>
+          <label class="label">Username</label>
+        </div>
+        <div>
+          <input
+              class="input"
+              placeholder="Username"
+              data-testid="usernameRegistrationField"
+              v-model="user.username"
+              type="text"
+          />
+        </div>
       </div>
-      <div id="password" class="input">
-        <label>Password</label>
-        <input
-            placeholder="password"
-            data-testid="passwordRegistrationField"
-            type="text"
-            v-model="user.password"
-        />
+      <div id="password" class="inputWithLabel">
+        <div>
+          <label class="label">Password</label>
+        </div>
+        <div>
+          <input
+              class="input"
+              placeholder="Password"
+              data-testid="passwordRegistrationField"
+              type="text"
+              v-model="user.password"
+          />
+        </div>
       </div>
 
       <BaseInput label="Email" type="text" />
@@ -78,6 +88,12 @@ export default {
 </script>
 
 <style scoped>
+.inputWithLabel {
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 0.5em;
+  position: relative;
+}
 #inputs {
   display: flex;
   flex-direction: column;
@@ -98,16 +114,26 @@ export default {
   color: red;
 }
 
+
+::placeholder {
+  color: darkgray;
+}
+
+.label {
+  text-align: right;
+  align-content: end;
+  position: absolute;
+  top: 50%;
+  left: 20%;
+  transform: translate(-50%, -50%);
+  width: 5em;
+}
+
 .input {
   text-align: left;
   font-size: 1em;
   color: black;
   background: white;
   padding: 0.5em;
-  max-width: 50%;
-  margin-left: 35%;
-}
-::placeholder {
-  color: darkgray;
 }
 </style>
