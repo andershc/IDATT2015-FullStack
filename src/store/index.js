@@ -1,5 +1,6 @@
 import { createStore } from "vuex";
 import FeedbackService from "@/services/FeedbackService";
+import UserService from "@/services/UserService";
 
 export default createStore({
   state: {
@@ -45,8 +46,7 @@ export default createStore({
     },
     RESET(state) {
       state.users = [];
-
-    }
+    },
   },
   actions: {
     submitSubmission({ commit }, submission) {
@@ -117,7 +117,7 @@ export default createStore({
     submitUser({ commit }, user) {
       console.log("Submission sent! " + user.username + " " + user.password);
       commit("ADD_USER", user);
-      FeedbackService.postUser(user)
+      UserService.postUser(user)
         .then(() => {
           console.log("Successfully registered in db");
         })

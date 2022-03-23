@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
@@ -47,6 +48,26 @@ export default {
     };
   },
   methods: {
+    sendCalculations(object){
+      const apiClient = axios.create({
+        baseURL: "http://localhost:8001/api",
+        withCredentials: false,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+      apiClient
+        .post("/calc", object)
+      .then((response) => {
+        console.log("Answer sent successfully: " + response.data.result);
+        this.input = response.data.result;
+        this.history.push(response.data.log);
+      })
+      .catch((error) => {
+        console.log("Failed to send with error: " + error)
+      })
+    },
     buttonOnClick(value) {
       this.input = `${this.input}${value}`;
     },
@@ -61,57 +82,19 @@ export default {
       this.input = this.input.slice(0, -1);
     },
     equals() {
-      this.secondValue = this.input;
-      switch (this.currentOperator) {
-        case "+":
-          if (this.firstValue === "9" && this.secondValue === "10") {
-            this.input = "21";
-            let nice = " Whats niiine plus teeen? ";
-            this.history.push(nice);
-          } else {
-            this.result =
-              parseFloat(this.firstValue) + parseFloat(this.secondValue);
-            this.input = this.result;
-            this.addToLog("+");
-          }
-          break;
-        case "-":
-          this.result =
-            parseFloat(this.firstValue) - parseFloat(this.secondValue);
-          this.input = this.result;
-          this.addToLog("-");
-          break;
-        case "*":
-          this.result =
-            parseFloat(this.firstValue) * parseFloat(this.secondValue);
-          this.input = this.result;
-          this.addToLog("*");
-          break;
-        case "/":
-          this.result =
-            parseFloat(this.firstValue) / parseFloat(this.secondValue);
-          this.input = this.result;
-          this.addToLog("/");
-          break;
-        default:
-          break;
-      }
+      this.secondValue = this.input
+      const object = {
+        firstValue: this.firstValue,
+        operator: this.currentOperator,
+        secondValue: this.secondValue,
+        userid: "11",
+      };
+      this.sendCalculations(object)
     },
     operatorSelect(operator) {
       this.firstValue = this.input;
       this.currentOperator = operator;
       this.input = "";
-    },
-    addToLog(operator) {
-      this.history.push(
-        this.firstValue +
-          " " +
-          operator +
-          " " +
-          this.secondValue +
-          " = " +
-          this.result
-      );
     },
     clearLog() {
       this.history = [];

@@ -1,48 +1,52 @@
 <template>
-    <h1>Register yourself</h1>
-    <div id="inputs">
-      <BaseInput label="Full name" type="text" />
-      <BaseInput label="Address" type="text" />
-      <div id="username" class="inputWithLabel">
-        <div>
-          <label class="label">Username</label>
-        </div>
-        <div>
-          <input
-              class="input"
-              placeholder="Username"
-              data-testid="usernameRegistrationField"
-              v-model="user.username"
-              type="text"
-          />
-        </div>
+  <h1>Register yourself</h1>
+  <div id="inputs">
+    <BaseInput label="Full name" type="text" />
+    <BaseInput label="Address" type="text" />
+    <div id="username" class="inputWithLabel">
+      <div>
+        <label class="label">Username</label>
       </div>
-      <div id="password" class="inputWithLabel">
-        <div>
-          <label class="label">Password</label>
-        </div>
-        <div>
-          <input
-              class="input"
-              placeholder="Password"
-              data-testid="passwordRegistrationField"
-              type="text"
-              v-model="user.password"
-          />
-        </div>
+      <div>
+        <input
+          class="input"
+          placeholder="Username"
+          data-testid="usernameRegistrationField"
+          v-model="user.username"
+          type="text"
+        />
       </div>
-
-      <BaseInput label="Email" type="text" />
-      <BaseInput label="Phone" type="tel" />
     </div>
-    <button data-testid="submit" @click="onRegister" id="register" type="submit">Register</button>
-    <label data-testid="registerStatusField" id="status" v-if="registerStatus">{{registerStatus}}</label>
+    <div id="password" class="inputWithLabel">
+      <div>
+        <label class="label">Password</label>
+      </div>
+      <div>
+        <input
+          class="input"
+          placeholder="Password"
+          data-testid="passwordRegistrationField"
+          type="text"
+          v-model="user.password"
+        />
+      </div>
+    </div>
+
+    <BaseInput label="Email" type="text" />
+    <BaseInput label="Phone" type="tel" />
+  </div>
+  <button data-testid="submit" @click="onRegister" id="register" type="submit">
+    Register
+  </button>
+  <label data-testid="registerStatusField" id="status" v-if="registerStatus">{{
+    registerStatus
+  }}</label>
 </template>
 
 <script>
 import BaseInput from "@/components/BaseInput";
 import { v4 as uuidv4 } from "uuid";
-import store from '@/store'
+import store from "@/store";
 import router from "@/router";
 
 export default {
@@ -53,11 +57,11 @@ export default {
   data() {
     return {
       user: {
-        id: '',
-        username: '',
-        password: '',
+        id: "",
+        username: "",
+        password: "",
       },
-      registerStatus: ''
+      registerStatus: "",
     };
   },
   methods: {
@@ -66,21 +70,21 @@ export default {
         ...this.user,
         id: uuidv4(),
       };
-      if(!(user.username === '' || user.password === '')){
-        store
-          .dispatch("submitUser", user)
-          .then(() => {
-            setTimeout(() =>
+      if (!(user.username === "" || user.password === "")) {
+        store.dispatch("submitUser", user).then(() => {
+          setTimeout(
+            () =>
               router.push("/login").catch((error) => {
                 router.push({
                   name: "ErrorDisplay",
                   params: { error: error },
-                })
-                  }), 100
-              )
-          });
-      } else{
-        this.registerStatus = "failed"
+                });
+              }),
+            100
+          );
+        });
+      } else {
+        this.registerStatus = "failed";
       }
     },
   },
@@ -107,13 +111,12 @@ export default {
   background: #f0be19;
   margin-top: 0.5em;
   border-radius: 10px;
-  padding: 0.5em 1em 0.5em 1em
+  padding: 0.5em 1em 0.5em 1em;
 }
 
 #status {
   color: red;
 }
-
 
 ::placeholder {
   color: darkgray;
