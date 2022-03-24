@@ -1,48 +1,73 @@
 <template>
-  <div id="loginContainer">
-    <div id="loginTitle">
-      <label>Please login!</label>
+  <div class="wrapper">
+    <div class="form-signin">
+      <h2 class="form-signin-heading">Please login!</h2>
+      <div class="inputDiv">
+        <label class="inputLabel">Username:</label>
+        <input
+          class="form-control"
+          data-testid="usernameField"
+          v-model="user.username"
+        />
+      </div>
+      <div class="inputDiv">
+        <label class="inputLabel">Password: </label>
+        <input
+          class="form-control"
+          data-testid="passwordField"
+          type="password"
+          v-model="user.password"
+        />
+      </div>
+      <button
+        class="button"
+        data-testid="submit"
+        type="submit"
+        v-on:click="handleSignIn"
+      >
+        Sign in
+      </button>
+      <label data-testid="loginStatusField"> {{ loginStatus }}</label>
+      <router-link id="link" v-if="loginStatus" to="/register"
+        >Register</router-link
+      >
     </div>
-    <div id="username">
-      <label id="usernameLabel">Username:</label>
-      <textarea data-testid="usernameField" v-model="user.username"></textarea>
-    </div>
-    <div id="password">
-      <label id="passwordLabel">Password: </label>
-      <textarea data-testid="passwordField" v-model="user.password"></textarea>
-      <button data-testid="submit" type="submit" v-on:click="handleSignIn">Sign in</button>
-    </div>
-    <label data-testid="loginStatusField">
-      {{ loginStatus }}</label>
-      <router-link  id="link" v-if="loginStatus" to="/register">Register</router-link>
-
   </div>
 </template>
 
 <script>
 import router from "@/router";
 import store from "@/store";
+import UserService from "@/services/UserService";
 
 export default {
   name: "LoginComponent",
   methods: {
-    handleSignIn() {
-      console.log(this.user.password + " " + this.user.username)
-      store.dispatch("fetchUser", this.user.username);
-      const fetchedUser = store.state.user;
-      if (
-        fetchedUser.username === this.user.username &&
-        fetchedUser.password === this.user.password
-      ) {
-        this.loginStatus="Success"
-        router.push("/");
-      } else if (fetchedUser.username === this.user.username) {
+    async handleSignIn() {
+      console.log(this.user.password + " " + this.user.username);
+      const response = await UserService.loginUser(this.user);
+      if (response === "Wrong password") {
         this.loginStatus = "Failed";
-        console.log("Wrong password");
+        alert(response);
+      } else if (response === "Access denied, wrong credentials....") {
+        this.loginStatus = "Failed";
+        alert(response);
       } else {
-        this.loginStatus = "Failed";
-        console.log("Not an existing user");
+        this.loginStatus = "Success";
+        store.commit("SET_TOKEN", response);
+        const loggedInUser = await UserService.getUser(
+          this.user.username,
+          this.user.password
+        );
+        this.id = loggedInUser.id;
+        await router.push({
+          name: "Home",
+        });
+
+        console.log("Logged in as " + this.user.username);
       }
+      store.commit("SET_LOGINSTATUS", this.loginStatus);
+      store.commit("SET_USER", this.user);
     },
   },
   data() {
@@ -50,47 +75,73 @@ export default {
       user: {
         username: "",
         password: "",
+        id: "",
       },
       loginStatus: "",
+      token: "",
     };
   },
   created() {
-    store.dispatch("fetchUsers");
     store.commit("SET_LOGINSTATUS", "");
   },
 };
 </script>
 
 <style scoped>
-#loginContainer {
-  display: grid;
-  justify-content: center;
-  margin: 40px;
+body {
+  background: #424749 !important;
 }
 
-#loginTitle {
-  font-size: x-large;
-  font-weight: bold;
+.wrapper {
+  margin-top: 80px;
+  margin-bottom: 80px;
+}
+
+.form-signin {
+  max-width: 380px;
+  padding: 15px 35px 45px;
+  margin: 0 auto;
+  background-color: #424749;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.form-signin-heading {
+  margin-bottom: 30px;
+}
+
+.form-control {
+  position: relative;
+  font-size: 16px;
+  height: auto;
+  padding: 10px;
+  text-align: left;
+}
+
+input[type="text"] {
+  margin-bottom: -1px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+input[type="password"] {
   margin-bottom: 20px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
-
-#username,
-#password {
+.inputDiv {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  column-gap: 20px;
-  min-width: 40px;
+  flex-direction: column;
 }
-
-#usernameLabel,
-#passwordLabel {
-  width: 100px;
+.inputLabel {
+  text-align: left;
 }
-textarea {
-  resize: none;
+.button{
+  background: #f0be19;
+  color: black;
 }
-#link {
-  color: white;
+.button:hover{
+  background: #f6c875;
+  color: black;
+  cursor: pointer;
 }
 </style>

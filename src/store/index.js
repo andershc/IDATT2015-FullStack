@@ -10,8 +10,26 @@ export default createStore({
     submission: {},
     flashMessage: "",
     loginStatus: "",
-    users: [],
     user: {},
+    token: "",
+    userID: "",
+  },
+  getters: {
+    GET_LOGINSTATUS(state) {
+      return state.loginStatus;
+    },
+    GET_USERID(state) {
+      return state.userID;
+    },
+    GET_TOKEN(state) {
+      return state.token;
+    },
+    GET_USERNAME(state) {
+      if(state.user.username === undefined){
+        return "Not logged in";
+      }
+      return state.user.username;
+    },
   },
   mutations: {
     ADD_SUBMISSION(state, submission) {
@@ -35,14 +53,12 @@ export default createStore({
     SET_LOGINSTATUS(state, loginStatus) {
       state.registered = loginStatus;
     },
-    SET_USERS(state, users) {
-      state.users = users;
-    },
     SET_USER(state, user) {
       state.user = user;
+      state.userID = user.id;
     },
-    ADD_USER(state, user) {
-      state.users.push(user);
+    SET_TOKEN(state, token) {
+      state.token = token;
     },
     RESET(state) {
       state.users = [];
@@ -91,33 +107,10 @@ export default createStore({
           });
       }
     },
-    fetchUsers({ commit, state }) {
-      FeedbackService.getUsers()
-        .then((response) => {
-          commit("SET_USERS", response.data);
-          console.log(response.data);
-          console.log(
-            "Successfully fetched users from server " + state.users.length
-          );
-        })
-        .catch((error) => {
-          console.log("could not get submissions" + error);
-        });
-    },
-    fetchUser({ commit, state }, username) {
-      const existingUser = state.users.find(
-        (user) => user.username === username
-      );
-      if (existingUser) {
-        commit("SET_USER", existingUser);
-      } else {
-        console.log("Error fetching user");
-      }
-    },
     submitUser({ commit }, user) {
       console.log("Submission sent! " + user.username + " " + user.password);
       commit("ADD_USER", user);
-      UserService.postUser(user)
+      UserService.registerUser(user)
         .then(() => {
           console.log("Successfully registered in db");
         })

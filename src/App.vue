@@ -7,9 +7,26 @@
     <router-link to="/">Home</router-link> |
     <router-link to="/login">Login</router-link> |
     <router-link to="/feedback">Feedback</router-link>
+    <a id="status">{{ this.$store.getters.GET_USERNAME }}</a>
   </div>
+
+
   <router-view />
 </template>
+
+<script>
+// @ is an alias to /src
+
+
+export default {
+  name: "App",
+  data() {
+    return {
+      username: ""
+    };
+  },
+};
+</script>
 
 <style>
 #app {
@@ -27,6 +44,10 @@
   to {
     background: transparent;
   }
+}
+
+#status {
+  margin-left: 5em;
 }
 
 #flashMessage {

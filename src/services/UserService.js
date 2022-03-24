@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-  baseURL: "http://localhost:8001/api",
+  baseURL: "http://localhost:8001",
   withCredentials: false,
   headers: {
     Accept: "application/json",
@@ -10,7 +10,40 @@ const apiClient = axios.create({
 });
 
 export default {
-  postUser(user) {
-    return apiClient.post("/users", user);
+  loginUser(user) {
+    return apiClient
+      .post("/token", null, {
+        params: {
+          username: user.username,
+          password: user.password,
+        },
+      })
+      .then((response) => {
+        return response.data;
+      });
+  },
+  registerUser(user) {
+    return apiClient
+      .post("/register", null, {
+        params: {
+          username: user.username,
+          password: user.password,
+        },
+      })
+      .then((response) => {
+        return response.data;
+      });
+  },
+  getUser(username, password) {
+    return apiClient
+      .get("/getUser", {
+        params: {
+          username: username,
+          password: password,
+        },
+      })
+      .then((response) => {
+        return response.data;
+      });
   },
 };
