@@ -30,12 +30,13 @@
         {{ value }}
       </li>
     </ul>
-    <button id="clear" @click="clearLog()">clear</button>
+    <button class="clear" @click="clearLog()">Clear</button>
+    <button class="clear" @click="getPrev()">Get History</button>
   </div>
 </template>
 
 <script>
-import axios from "axios";
+import CalculationService from "@/services/CalculationService";
 export default {
   data() {
     return {
@@ -45,28 +46,18 @@ export default {
       secondValue: 0,
       currentOperator: "",
       history: [],
+      config: {
+        headers: {
+          Authorization: "Bearer " + this.$store.getters.GET_TOKEN,
+        },
+      },
     };
   },
   methods: {
-    sendCalculations(object){
-      const apiClient = axios.create({
-        baseURL: "http://localhost:8001/api",
-        withCredentials: false,
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      });
-      apiClient
-        .post("/calc", object)
-      .then((response) => {
-        console.log("Answer sent successfully: " + response.data.result);
-        this.input = response.data.result;
-        this.history.push(response.data.log);
-      })
-      .catch((error) => {
-        console.log("Failed to send with error: " + error)
-      })
+    async sendCalculations(object) {
+      let response = await CalculationService.postCalc(object, this.config);
+      this.input = response.result;
+      this.history.push(response.log);
     },
     buttonOnClick(value) {
       this.input = `${this.input}${value}`;
@@ -82,14 +73,12 @@ export default {
       this.input = this.input.slice(0, -1);
     },
     equals() {
-      this.secondValue = this.input
+      this.secondValue = this.input;
       const object = {
-        firstValue: this.firstValue,
-        operator: this.currentOperator,
-        secondValue: this.secondValue,
-        userid: "11",
+        calculations:
+          this.firstValue + " " + this.currentOperator + " " + this.secondValue,
       };
-      this.sendCalculations(object)
+      this.sendCalculations(object);
     },
     operatorSelect(operator) {
       this.firstValue = this.input;
@@ -98,6 +87,11 @@ export default {
     },
     clearLog() {
       this.history = [];
+    },
+    async getPrev() {
+      const prevCalcs = await CalculationService.getPrev(this.config);
+      this.clearLog();
+      prevCalcs.forEach((calc) => this.history.push(calc.calculations));
     },
   },
 };
